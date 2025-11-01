@@ -3984,6 +3984,10 @@ EOF
         force_old_windows_setup=$2
         shift 2
         ;;
+    --static-ip-auto-config)
+        static_ip_auto_config=$2
+        shift 2
+        ;;
     --img)
         img=$2
         shift 2
