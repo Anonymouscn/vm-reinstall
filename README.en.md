@@ -87,7 +87,7 @@ The system requirements for the target system are as follows:
 For server outside China:
 
 ```bash
-curl -O https://raw.githubusercontent.com/bin456789/reinstall/main/reinstall.sh || wget -O ${_##*/} $_
+curl -O https://raw.githubusercontent.com/Anonymouscn/vm-reinstall/refs/heads/main/reinstall.sh || wget -O ${_##*/} $_
 ```
 
 For server inside China:

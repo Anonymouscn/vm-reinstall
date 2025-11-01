@@ -7270,6 +7270,12 @@ case 1 in
     ;;
 esac
 
+if [ "$static_ip_auto_config" = 1 ]; then
+    info "configure static ip for new system"
+    echo -e "address: $ipv4_addr , gateway: $ipv4_gateway"
+    exit
+fi
+
 if [ "$hold" = 2 ]; then
     info "hold 2"
     exit

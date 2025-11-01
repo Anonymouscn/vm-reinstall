@@ -3,7 +3,7 @@
 # shellcheck disable=SC2086
 
 set -eE
-confhome=https://raw.githubusercontent.com/bin456789/reinstall/main
+confhome=https://raw.githubusercontent.com/Anonymouscn/vm-reinstall/main
 confhome_cn=https://cnb.cool/bin456789/reinstall/-/git/raw/main
 # confhome_cn=https://www.ghproxy.cc/https://raw.githubusercontent.com/bin456789/reinstall/main
 
@@ -3841,6 +3841,10 @@ while true; do
         # 转为绝对路径
         frpc_config=$(readlink -f "$frpc_config")
 
+        shift 2
+        ;;
+    --static-ip-auto-config)
+        static_ip_auto_config=$2
         shift 2
         ;;
     --force-boot-mode)
