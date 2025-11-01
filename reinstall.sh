@@ -3818,6 +3818,10 @@ while true; do
         force_cn=1
         shift
         ;;
+    --static-ip-auto-config)
+        static_ip_auto_config=$2
+        shift 2
+        ;;
     --hold | --sleep)
         if ! { [ "$2" = 1 ] || [ "$2" = 2 ]; }; then
             error_and_exit "Invalid $1 value: $2"
@@ -3983,10 +3987,6 @@ EOF
         ;;
     --force-old-windows-setup)
         force_old_windows_setup=$2
-        shift 2
-        ;;
-    --static-ip-auto-config)
-        static_ip_auto_config=$2
         shift 2
         ;;
     --img)

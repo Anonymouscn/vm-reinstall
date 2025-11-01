@@ -7270,9 +7270,11 @@ case 1 in
     ;;
 esac
 
+# 静态ip配置
 if [ "$static_ip_auto_config" = 1 ]; then
     info "configure static ip for new system"
     echo -e "address: $ipv4_addr , gateway: $ipv4_gateway"
+    # 将获取到的静态ip信息，写入安装磁盘 /boot 分区
     exit
 fi
 
