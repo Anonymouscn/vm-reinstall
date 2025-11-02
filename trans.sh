@@ -7273,8 +7273,27 @@ esac
 # 静态ip配置
 if [ "$static_ip_auto_config" = 1 ]; then
     info "configure static ip for new system"
-    echo -e "address: $ipv4_addr , gateway: $ipv4_gateway"
-    # 将获取到的静态ip信息，写入安装磁盘 /boot 分区
+    get_netconf_to ipv4_addr
+    get_netconf_to ipv4_gateway
+    info "address: $ipv4_addr , gateway: $ipv4_gateway"
+    
+    if [ "$boot_device" = "" ]; then
+        boot_device = "sda2"
+    fi
+    if [ "$boot_path" = "" ]; then
+        boot_path = "/"
+    fi
+
+    target_boot_device = /dev/$boot_device
+
+    # 将获取到的静态ip信息. 写入磁盘 /boot 分区, 提供给新系统 hook 调用
+    mount $target_boot_device /mnt
+    cat <<EOF > /mnt/$boot_path/network_config.env
+IPV4_ADDR=$ipv4_addr
+IPV4_GATEWAY=$ipv4_gateway
+EOF
+    umount $target_boot_device
+
     exit
 fi
 
