@@ -7273,26 +7273,37 @@ esac
 # 静态ip配置
 if [ "$static_ip_auto_config" = 1 ]; then
     info "configure static ip for new system"
-    get_netconf_to ipv4_addr
-    get_netconf_to ipv4_gateway
-    info "address: $ipv4_addr , gateway: $ipv4_gateway"
+
+    network_interface=$(ls /dev/netconf | awk '/^(eth|ens)[0-9]+/ {print $1; exit}')
+
+    if [ -n "$network_interface" ]; then
+        network_config_dir=/dev/netconf/$network_interface
+
+        mac_addr=$(cat $network_config_dir/mac_addr)
+        ipv4_addr=$(cat $network_config_dir/ipv4_addr)
+        ipv4_gateway=$(cat $network_config_dir/ipv4_gateway)
+
+        info "ipv4: $ipv4_addr , gateway: $ipv4_gateway, mac:$mac_addr"
     
-    if [ "$boot_device" = "" ]; then
-        boot_device = "sda2"
-    fi
-    if [ "$boot_path" = "" ]; then
-        boot_path = "/"
-    fi
+        if [ "$boot_device" = "" ]; then
+            boot_device = "sda2"
+        fi
+        if [ "$boot_path" = "" ]; then
+            boot_path = "/"
+        fi
 
-    target_boot_device = /dev/$boot_device
+        target_boot_device = /dev/$boot_device
 
-    # 将获取到的静态ip信息. 写入磁盘 /boot 分区, 提供给新系统 hook 调用
-    mount $target_boot_device /mnt
-    cat <<EOF > /mnt/$boot_path/network_config.env
+        # 将获取到的静态ip信息. 写入磁盘 /boot 分区, 提供给新系统 hook 调用
+        mount $target_boot_device /mnt
+        cat <<EOF > /mnt/$boot_path/network_config.env
 IPV4_ADDR=$ipv4_addr
 IPV4_GATEWAY=$ipv4_gateway
+MAC_ADDR=$mac_addr
+DNS_SERVERS=8.8.8.8, 8.8.4.4
 EOF
-    umount $target_boot_device
+        umount $target_boot_device
+    fi
 
     exit
 fi
