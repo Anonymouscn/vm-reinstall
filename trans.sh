@@ -7282,30 +7282,33 @@ if [ "$static_ip_auto_config" = 1 ]; then
         mac_addr=$(cat $network_config_dir/mac_addr)
         ipv4_addr=$(cat $network_config_dir/ipv4_addr)
         ipv4_gateway=$(cat $network_config_dir/ipv4_gateway)
+        ipv6_addr=$(cat $network_config_dir/ipv6_addr)
+        ipv6_gateway=$(cat $network_config_dir/ipv6_gateway)
 
         info "ipv4: $ipv4_addr , gateway: $ipv4_gateway, mac:$mac_addr"
     
-        if [ "$boot_device" = "" ]; then
-            boot_device = "sda2"
+        if [ -z "$boot_device" ]; then
+            boot_device="sda1"
         fi
-        if [ "$boot_path" = "" ]; then
-            boot_path = "/"
+        if [ -z "$boot_path" ]; then
+            boot_path="/boot"
         fi
 
-        target_boot_device = /dev/$boot_device
+        target_boot_device=/dev/$boot_device
 
         # 将获取到的静态ip信息. 写入磁盘 /boot 分区, 提供给新系统 hook 调用
         mount $target_boot_device /mnt
         cat <<EOF > /mnt/$boot_path/network_config.env
+IFACE=$network_interface
 IPV4_ADDR=$ipv4_addr
 IPV4_GATEWAY=$ipv4_gateway
+IPV6_ADDR=$ipv6_addr
+IPV6_GATEWAY=$ipv6_gateway
 MAC_ADDR=$mac_addr
-DNS_SERVERS=8.8.8.8, 8.8.4.4
+DNS_SERVERS=8.8.8.8,8.8.4.4
 EOF
         umount $target_boot_device
     fi
-
-    exit
 fi
 
 if [ "$hold" = 2 ]; then
