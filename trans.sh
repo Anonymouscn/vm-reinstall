@@ -7296,7 +7296,7 @@ if [ "$static_ip_auto_config" = 1 ]; then
 
         target_boot_device=/dev/$boot_device
 
-        # 将获取到的静态ip信息. 写入磁盘 /boot 分区, 提供给新系统 hook 调用
+        # 将获取到的静态ip信息, 写入磁盘 /boot 分区, 提供给新系统 hook 调用
         mount $target_boot_device /mnt
         cat <<EOF > /mnt/$boot_path/network_config.env
 IFACE=$network_interface
@@ -7306,6 +7306,7 @@ IPV6_ADDR=$ipv6_addr
 IPV6_GATEWAY=$ipv6_gateway
 MAC_ADDR=$mac_addr
 DNS_SERVERS=8.8.8.8,8.8.4.4
+HOSTNAME=$hostname
 EOF
         umount $target_boot_device
     fi
